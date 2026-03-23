@@ -232,7 +232,7 @@ export default function HomePage() {
             </div>
             <div className="lg:w-1/2 flex justify-center">
               <ScrollReveal className="w-full max-w-sm">
-                <div className="glow bg-blue-500/30" />
+                <div className="glow bg-white/20" />
                 <div className="card-content relative aspect-square rounded-3xl bg-gradient-to-br from-blue-600/20 to-indigo-600/10 flex items-center justify-center">
                   <MapPin className="size-20 text-blue-500/60" />
                   <div className="absolute inset-0 rounded-3xl ring-1 ring-white/5" />
@@ -252,7 +252,7 @@ export default function HomePage() {
             </div>
             <div className="lg:w-1/2 flex justify-center">
               <ScrollReveal className="w-full max-w-sm">
-                <div className="glow bg-green-500/30" />
+                <div className="glow bg-white/20" />
                 <div className="card-content relative aspect-square rounded-3xl bg-gradient-to-br from-green-600/20 to-emerald-600/10 flex items-center justify-center">
                   <Phone className="size-20 text-green-500/60" />
                   <div className="absolute inset-0 rounded-3xl ring-1 ring-white/5" />
@@ -272,7 +272,7 @@ export default function HomePage() {
             </div>
             <div className="lg:w-1/2 flex justify-center">
               <ScrollReveal className="w-full max-w-sm">
-                <div className="glow bg-emerald-500/30" />
+                <div className="glow bg-white/20" />
                 <div className="card-content relative aspect-square rounded-3xl bg-gradient-to-br from-emerald-600/20 to-teal-600/10 flex items-center justify-center">
                   <CheckCircle className="size-20 text-emerald-500/60" />
                   <div className="absolute inset-0 rounded-3xl ring-1 ring-white/5" />
