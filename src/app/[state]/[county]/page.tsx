@@ -47,7 +47,7 @@ export default async function CountyPage({ params }: Props) {
     .limit(1)
     .single();
 
-  let contractor: { business_name: string; phone: string } | null = null;
+  let contractor: { business_name: string; phone: string; logo_url: string | null } | null = null;
   let trackingPhone: string | null = null;
   let contractorServices: string[] = [];
 
@@ -57,7 +57,7 @@ export default async function CountyPage({ params }: Props) {
       { data: phoneData },
       { data: serviceData },
     ] = await Promise.all([
-      supabase.from('contractors').select('business_name, phone').eq('id', territory.contractor_id).eq('status', 'active').single(),
+      supabase.from('contractors').select('business_name, phone, logo_url').eq('id', territory.contractor_id).eq('status', 'active').single(),
       supabase.from('phone_numbers').select('phone_number').eq('territory_id', territory.id).eq('is_active', true).limit(1).single(),
       supabase.from('contractor_services').select('service').eq('contractor_id', territory.contractor_id),
     ]);
@@ -76,6 +76,7 @@ export default async function CountyPage({ params }: Props) {
         name: contractor.business_name,
         description: `Professional wildlife removal services in ${matchedCounty}, ${stateAbbr}`,
         areaServed: { '@type': 'AdministrativeArea', name: `${matchedCounty}, ${stateName}` },
+        ...(contractor.logo_url ? { image: contractor.logo_url } : {}),
         ...(displayPhone ? { telephone: displayPhone } : {}),
         address: { '@type': 'PostalAddress', addressRegion: stateAbbr, addressLocality: matchedCounty },
       }
@@ -125,11 +126,24 @@ export default async function CountyPage({ params }: Props) {
             {contractor ? (
               <div className="rounded-2xl bg-white p-8 shadow-lg shadow-gray-200/50 ring-1 ring-gray-100">
                 <div className="flex items-start justify-between">
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-900">{contractor.business_name}</h2>
-                    <p className="mt-1 text-sm text-gray-500">
-                      Serving {matchedCounty}, {stateAbbr}
-                    </p>
+                  <div className="flex items-center gap-4">
+                    {contractor.logo_url ? (
+                      <img
+                        src={contractor.logo_url}
+                        alt={`${contractor.business_name} logo`}
+                        className="size-16 rounded-xl object-contain bg-gray-50 p-1"
+                      />
+                    ) : (
+                      <div className="flex size-16 items-center justify-center rounded-xl bg-green-50 text-xl font-bold text-green-700">
+                        {contractor.business_name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()}
+                      </div>
+                    )}
+                    <div>
+                      <h2 className="text-2xl font-bold text-gray-900">{contractor.business_name}</h2>
+                      <p className="mt-1 text-sm text-gray-500">
+                        Serving {matchedCounty}, {stateAbbr}
+                      </p>
+                    </div>
                   </div>
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-3 py-1 text-xs font-semibold text-green-700 ring-1 ring-green-200">
                     <span className="size-1.5 rounded-full bg-green-500" />

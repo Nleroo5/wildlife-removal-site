@@ -52,7 +52,7 @@ export default async function ServicePage({ params }: Props) {
     .limit(1)
     .single();
 
-  let contractor: { business_name: string; phone: string } | null = null;
+  let contractor: { business_name: string; phone: string; logo_url: string | null } | null = null;
   let trackingPhone: string | null = null;
   let offersThisService = false;
 
@@ -64,7 +64,7 @@ export default async function ServicePage({ params }: Props) {
     ] = await Promise.all([
       supabase
         .from('contractors')
-        .select('business_name, phone')
+        .select('business_name, phone, logo_url')
         .eq('id', territory.contractor_id)
         .eq('status', 'active')
         .single(),
@@ -137,16 +137,29 @@ export default async function ServicePage({ params }: Props) {
             {contractor ? (
               <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
                 <div className="flex items-start justify-between">
-                  <div>
-                    <h2 className="text-xl font-bold text-slate-900">{contractor.business_name}</h2>
-                    <p className="mt-1 text-sm text-slate-600">
-                      {service.name} in {matchedCounty}, {stateAbbr}
-                    </p>
-                    {offersThisService && (
-                      <span className="mt-2 inline-flex rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
-                        Offers {service.name}
-                      </span>
+                  <div className="flex items-center gap-4">
+                    {contractor.logo_url ? (
+                      <img
+                        src={contractor.logo_url}
+                        alt={`${contractor.business_name} logo`}
+                        className="size-14 rounded-xl object-contain bg-gray-50 p-1"
+                      />
+                    ) : (
+                      <div className="flex size-14 items-center justify-center rounded-xl bg-blue-50 text-lg font-bold text-blue-700">
+                        {contractor.business_name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()}
+                      </div>
                     )}
+                    <div>
+                      <h2 className="text-xl font-bold text-slate-900">{contractor.business_name}</h2>
+                      <p className="mt-1 text-sm text-slate-600">
+                        {service.name} in {matchedCounty}, {stateAbbr}
+                      </p>
+                      {offersThisService && (
+                        <span className="mt-2 inline-flex rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
+                          Offers {service.name}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <span className="inline-flex rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800">
                     Verified
